@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "starlette-aad"
-version = "0.1.0"
+version = "0.0.0"
 description = "ASGI Middleware to verify and check jwt tokens from Azure AD"
 authors = ["Idar <idarbergli@gmail.com>"]
 license = "MIT"
