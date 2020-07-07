@@ -1,25 +1,23 @@
 #
 #
 #
-import logging
-import json
 import base64
+import json
+import logging
 import typing
 
 import httpx
-from starlette.requests import HTTPConnection
-from starlette.datastructures import Headers
-from starlette.types import Scope, ASGIApp, Receive, Send
-from jose import jose_jwt
-from jose.exceptions import JWTError
-from cryptography.hazmat.primitives.asymmetric.rsa import RSAPublicNumbers
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric.rsa import RSAPublicNumbers
+from jose import jose_jwt
+from jose.exceptions import JWTError
+from starlette.datastructures import Headers
+from starlette.requests import HTTPConnection
+from starlette.types import ASGIApp, Receive, Scope, Send
 
-from ._config import AsgiAdAuthConfig
 from ._exceptions import InvalidAuthorizationToken
-from ._models import OpenIdConnect, AzureAdJWKS, AzureAdKey, AadAccessToken, AadUser
-
+from ._models import AadAccessToken, AadUser, AzureAdJWKS, AzureAdKey, OpenIdConnect
 
 logger = logging.getLogger(__name__)
 
@@ -30,18 +28,12 @@ _cache = {}
 
 class BaseMiddleware:
     def __init__(
-        self,
-        app: ASGIApp,
-        tenant_id: str,
-        client_id: str,
-        discovery_endpoint: str = None,
+        self, app: ASGIApp, tenant_id: str, client_id: str, discovery_endpoint: str = None,
     ):
         self._app = app
         self._tenant_id = tenant_id
         self._client_id = client_id
-        self._discovery_endpoint = (
-            discovery_endpoint if discovery_endpoint else BASE_URL.format(tenant_id)
-        )
+        self._discovery_endpoint = discovery_endpoint if discovery_endpoint else BASE_URL.format(tenant_id)
 
     def ensure_bytes(self, value):
         if isinstance(value, str):
@@ -56,10 +48,7 @@ class BaseMiddleware:
         return (
             RSAPublicNumbers(n=self.decode_value(jwk.n), e=self.decode_value(jwk.e))
             .public_key(default_backend())
-            .public_bytes(
-                encoding=serialization.Encoding.PEM,
-                format=serialization.PublicFormat.SubjectPublicKeyInfo,
-            )
+            .public_bytes(encoding=serialization.Encoding.PEM, format=serialization.PublicFormat.SubjectPublicKeyInfo,)
         )
 
     def get_jwt(self, header: Headers) -> str:
@@ -135,11 +124,7 @@ class BaseMiddleware:
 
 class VerifyAzureAdJWT(BaseMiddleware):
     def __init__(
-        self,
-        app: ASGIApp,
-        tenant_id: str,
-        client_id: str,
-        discovery_endpoint: str = None,
+        self, app: ASGIApp, tenant_id: str, client_id: str, discovery_endpoint: str = None,
     ):
         super().__init__(app, tenant_id, client_id, discovery_endpoint)
 
@@ -167,12 +152,7 @@ class VerifyAzureAdJWT(BaseMiddleware):
 
         try:
             decoded = jose_jwt.decode(
-                token,
-                public_key,
-                verify=True,
-                algorithms=["RS256"],
-                audience=audience,
-                issuer=issuer,
+                token, public_key, verify=True, algorithms=["RS256"], audience=audience, issuer=issuer,
             )
 
             access_token = AadAccessToken(**decoded)

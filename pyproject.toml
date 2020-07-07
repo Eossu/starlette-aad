@@ -23,6 +23,25 @@ black = {version = "^19.10b0", allow-prereleases = true}
 flake8 = "^3.8.3"
 isort = "^5.0.4"
 
+[tool.poetry.scripts]
+
+[tool.black]
+line-length = 120
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
 [build-system]
 requires = ["poetry>=0.12"]
 build-backend = "poetry.masonry.api"

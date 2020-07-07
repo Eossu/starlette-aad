@@ -37,6 +37,11 @@ stages:
   - template: python/stages/sdk-test.yaml@templates
     parameters:
       PythonVersion: "3.8"
+      jobs:
+        py37:
+          os: linux
+        py38:
+          os: linux
     
   - template: python/stages/sdk-publish.yaml@templates
     parameters:
