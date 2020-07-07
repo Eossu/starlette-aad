@@ -7,14 +7,23 @@ resources:
       ref: refs/tags/1.0
 
 trigger:
-  - develop
-  - feature/*
-  - bugfix/*
-  - hotfix/*
-  - refs/tags/*
+  tags:
+    include:
+      - v*
+  
+  branches:
+    include:
+      - develop
+      - feature/*
+      - bugfix/*
+      - hotfix/*
+      - refs/tags/*
 
 pr:
-  - develop
+  branches:
+    include:
+      - develop
+
 
 variables:
   - name: CI
