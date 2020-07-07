@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "aad-asgi"
+name = "starlette-aad"
 version = "0.1.0"
 description = "ASGI Middleware to verify and check jwt tokens from Azure AD"
 authors = ["Idar <idarbergli@gmail.com>"]
