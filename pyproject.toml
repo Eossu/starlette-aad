@@ -4,6 +4,9 @@ version = "0.0.0"
 description = "ASGI Middleware to verify and check jwt tokens from Azure AD"
 authors = ["Idar <idarbergli@gmail.com>"]
 license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/Eossu/starlette-aad"
+repository = "https://github.com/Eossu/starlette-aad"
 
 [tool.poetry.dependencies]
 python = "^3.7"
@@ -22,8 +25,21 @@ mypy = "^0.782"
 black = {version = "^19.10b0", allow-prereleases = true}
 flake8 = "^3.8.3"
 isort = "^5.0.4"
+coverage = {extras = ["toml"], version = "^5.2"}
+pytest-mock = "^3.1.1"
 
 [tool.poetry.scripts]
+
+[tool.coverage.paths]
+source = ["src", "tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["starlette_aad"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 100
 
 [tool.black]
 line-length = 120
